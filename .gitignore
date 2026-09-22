@@ -1,0 +1,13 @@
+# Binaries and executables
+cloudflared.exe
+*.exe
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment & IDE
+.env
+.vscode/
+.idea/
+.DS_Store

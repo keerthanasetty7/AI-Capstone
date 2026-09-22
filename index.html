@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plantr AI - Plant Disease Prediction & Agronomist Platform</title>
+  <meta name="description" content="AI-powered plant disease prediction app. Scan leaf photos to identify plant diseases, generate neural heatmaps, calculate infection severity, and receive organic & chemical treatment protocols.">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Sticky Glass Navigation Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="#" class="logo-group">
+        <div class="logo-icon">
+          <i data-lucide="leaf"></i>
+        </div>
+        <div>
+          <div class="logo-title">Plantr <span style="font-weight: 300;">AI</span></div>
+          <div class="logo-badge">Agronomist Pro v2.4</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <button class="nav-btn active" data-tab="scanner">
+          <i data-lucide="scan"></i>
+          <span data-i18n="tabScanner">AI Leaf Scanner</span>
+        </button>
+        <button class="nav-btn" data-tab="library">
+          <i data-lucide="book-open"></i>
+          <span data-i18n="tabLibrary">Disease Library</span>
+        </button>
+        <button class="nav-btn" data-tab="doctor">
+          <i data-lucide="bot"></i>
+          <span data-i18n="tabDoctor">AI Doctor Chat</span>
+        </button>
+        <button class="nav-btn" data-tab="radar">
+          <i data-lucide="radar"></i>
+          <span data-i18n="tabRadar">Outbreak Radar</span>
+        </button>
+        <button class="nav-btn" data-tab="history">
+          <i data-lucide="history"></i>
+          <span data-i18n="tabHistory">Scan History</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <select class="lang-select" id="langSelect" aria-label="Select Language">
+          <option value="en">English (EN)</option>
+          <option value="es">Español (ES)</option>
+          <option value="hi">हिंदी (HI)</option>
+          <option value="fr">Français (FR)</option>
+          <option value="ta">தமிழ் (TA)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="main-content">
+
+    <!-- TAB 1: AI LEAF SCANNER -->
+    <section id="tab-scanner" class="tab-panel active">
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <div class="hero-subtitle" data-i18n="tagline">AI-Powered Plant Disease Prediction & Diagnostic Engine</div>
+        <h1 class="hero-title">Protect Your Crops with Instant AI Vision</h1>
+        <p class="hero-desc">Upload or snap a leaf photo to diagnose 38+ plant diseases across 14 crop species. Get instant lesion heatmaps, severity scores, and organic remedies.</p>
+      </div>
+
+      <!-- Crop Filter Bar -->
+      <div class="crop-filter-bar">
+        <button class="crop-chip active" data-crop="all" data-i18n="filterAll">All Crops</button>
+        <button class="crop-chip" data-crop="Tomato">Tomato</button>
+        <button class="crop-chip" data-crop="Potato">Potato</button>
+        <button class="crop-chip" data-crop="Corn">Corn / Maize</button>
+        <button class="crop-chip" data-crop="Apple">Apple</button>
+        <button class="crop-chip" data-crop="Grape">Grape</button>
+        <button class="crop-chip" data-crop="Pepper Bell">Pepper</button>
+        <button class="crop-chip" data-crop="Strawberry">Strawberry</button>
+      </div>
+
+      <!-- Plant Description Panel -->
+      <div class="glass-panel plant-desc-panel" id="plantDescPanel" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+          <div class="upload-icon-circle" style="width: 40px; height: 40px; flex-shrink: 0;">
+            <i data-lucide="pencil-line" style="width: 20px; height: 20px;"></i>
+          </div>
+          <div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; color: var(--text-main);">Describe Your Plant</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">Tell Plantr AI what plant you're scanning so it locks the detection to the right crop.</p>
+          </div>
+        </div>
+
+        <div class="desc-input-row">
+          <!-- Free-text description -->
+          <div class="desc-field" style="flex: 1;">
+            <label for="plantDescInput" class="desc-label">
+              <i data-lucide="message-square-text" style="width: 14px; height: 14px;"></i>
+              Describe the plant or symptoms (optional)
+            </label>
+            <input
+              type="text"
+              id="plantDescInput"
+              class="desc-text-input"
+              placeholder="e.g. tomato plant with dark brown spots and yellow edges..."
+              maxlength="200"
+            >
+          </div>
+
+          <!-- Crop selector dropdown -->
+          <div class="desc-field" style="flex: 0 0 220px;">
+            <label for="plantCropSelect" class="desc-label">
+              <i data-lucide="wheat" style="width: 14px; height: 14px;"></i>
+              Select Crop Type
+            </label>
+            <div class="desc-select-wrapper">
+              <select id="plantCropSelect" class="desc-select" aria-label="Select crop type">
+                <option value="auto">🔍 Auto-detect (AI decides)</option>
+                <optgroup label="Fruits &amp; Orchards">
+                  <option value="Apple">🍎 Apple</option>
+                  <option value="Grape">🍇 Grape</option>
+                  <option value="Strawberry">🍓 Strawberry</option>
+                </optgroup>
+                <optgroup label="Vegetables">
+                  <option value="Tomato">🍅 Tomato</option>
+                  <option value="Potato">🥔 Potato</option>
+                  <option value="Pepper Bell">🫑 Bell Pepper</option>
+                </optgroup>
+                <optgroup label="Grains &amp; Row Crops">
+                  <option value="Corn">🌽 Corn / Maize</option>
+                </optgroup>
+              </select>
+              <i data-lucide="chevron-down" class="desc-select-icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active crop confirmation badge (shows when not auto) -->
+        <div id="cropLockBadge" style="display: none; margin-top: 0.75rem; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">Detection locked to:</span>
+          <span id="cropLockLabel" class="status-badge healthy" style="padding: 3px 12px; font-size: 0.75rem;"></span>
+          <button onclick="document.getElementById('plantCropSelect').value='auto'; document.getElementById('cropLockBadge').style.display='none';" style="background: none; border: none; cursor: pointer; color: var(--text-dim); margin-left: 2px;" title="Remove lock">
+            <i data-lucide="x-circle" style="width: 15px; height: 15px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scanner Workspace Grid -->
+      <div class="scanner-grid">
+        <!-- Left Column: Upload & Laser Scan Viewport -->
+        <div class="glass-panel">
+          <!-- Drop Zone -->
+          <div class="upload-box" id="dropZone">
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            <div class="upload-icon-circle">
+              <i data-lucide="upload-cloud" style="width: 32px; height: 32px;"></i>
+            </div>
+            <h3 class="upload-title" data-i18n="uploadTitle">Drop your leaf image here or click to browse</h3>
+            <p class="upload-sub" data-i18n="uploadSub">Supports JPG, PNG, WEBP (Max 15MB)</p>
+
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+              <button class="btn-primary" onclick="document.getElementById('fileInput').click()">
+                <i data-lucide="file-image"></i>
+                <span data-i18n="btnUpload">Select Leaf Photo</span>
+              </button>
+              <button class="btn-secondary" id="btnCamera">
+                <i data-lucide="camera"></i>
+                <span data-i18n="btnCamera">Use Camera</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Scanner Viewport (Visible during/after scan) -->
+          <div class="scanner-viewport" id="scannerViewport" style="display: none;">
+            <div class="laser-line" id="laserLine"></div>
+            <div class="scanner-hud">
+              <span class="hud-tag" id="hudCropLabel">NEURAL HEATMAP MODE</span>
+              <span class="hud-tag" style="background: rgba(16, 185, 129, 0.2);">ACTIVE MATRIX</span>
+            </div>
+            <canvas id="heatmapCanvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Right Column: Diagnostic Results Card -->
+        <div class="glass-panel" id="resultsCard" style="display: none;">
+          <!-- Dynamically populated by app.js -->
+        </div>
+      </div>
+
+      <!-- Pre-Loaded Sample Test Gallery -->
+      <div class="sample-gallery">
+        <h3 class="gallery-title">
+          <i data-lucide="sparkles" style="color: var(--emerald-light);"></i>
+          <span data-i18n="sampleHeader">Or Test Instant Sample Leaf Scans</span>
+        </h3>
+        <div class="sample-grid" id="sampleGrid">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: DISEASE LIBRARY -->
+    <section id="tab-library" class="tab-panel">
+      <div style="margin-bottom: 2rem;">
+        <h2 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">PlantVillage Disease Knowledge Base</h2>
+        <p style="color: var(--text-muted);">Explore 38 plant disease profiles, pathogen symptoms, and cure guidelines across 14 agricultural crops.</p>
+      </div>
+      <div class="sample-grid" id="libraryGrid">
+        <!-- Populated by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 3: AI DOCTOR CHAT -->
+    <section id="tab-doctor" class="tab-panel">
+      <div class="glass-panel" style="max-width: 900px; margin: 0 auto; padding: 0;">
+        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-emerald); display: flex; align-items: center; gap: 0.75rem;">
+          <div class="logo-icon" style="width: 38px; height: 38px;">
+            <i data-lucide="bot"></i>
+          </div>
+          <div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700;">Plantr AI Agronomist Assistant</h3>
+            <div style="font-size: 0.8rem; color: var(--emerald-light); font-weight: 600;">Online &bull; Trained on Plant Pathology & Soil Chemistry</div>
+          </div>
+        </div>
+
+        <div class="chat-container">
+          <div class="chat-messages" id="chatMessages">
+            <div class="msg-bubble bot">
+              <strong style="color: var(--emerald-light); font-size: 0.8rem; display: block; margin-bottom: 4px;">PLANTR AI DOCTOR</strong>
+              Hello! I am your AI Agronomist Assistant. Ask me anything about crop diseases, organic neem oil sprays, pesticide dosages, or preventive farming strategies.
+            </div>
+          </div>
+
+          <div class="chat-input-bar">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Ask Plantr AI Doctor about crop care, dosages..." data-i18n-placeholder="chatPlaceholder">
+            <button class="btn-primary" id="chatSendBtn">
+              <i data-lucide="send"></i>
+              <span data-i18n="btnSend">Send</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: OUTBREAK RADAR -->
+    <section id="tab-radar" class="tab-panel">
+      <div style="margin-bottom: 2rem; text-align: center;">
+        <h2 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">Regional Disease Outbreak Radar</h2>
+        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Real-time simulated weather & atmospheric humidity monitoring predicting local crop infection spikes.</p>
+      </div>
+
+      <div class="glass-panel radar-map-box" style="max-width: 900px; margin: 0 auto; text-align: center;">
+        <div style="margin-bottom: 1.5rem; display: flex; justify-content: center; gap: 1rem;">
+          <span class="hud-tag" style="background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: #fca5a5;">3 ACTIVE WARNINGS</span>
+          <span class="hud-tag" style="background: rgba(16, 185, 129, 0.2);">HUMIDITY: 86%</span>
+        </div>
+
+        <div class="radar-sweep-circle" id="radarCircle">
+          <div class="radar-line"></div>
+          <div id="radarPinContainer">
+            <!-- Pins dynamically rendered by app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: SCAN HISTORY -->
+    <section id="tab-history" class="tab-panel">
+      <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h2 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">Past Scan Diagnostics</h2>
+          <p style="color: var(--text-muted);">View previous leaf analysis history stored locally in your browser.</p>
+        </div>
+        <button class="btn-secondary" onclick="localStorage.removeItem('plantr_history'); app.scanHistory=[]; app.renderHistory();">
+          <i data-lucide="trash-2"></i> Clear History
+        </button>
+      </div>
+
+      <div id="historyList">
+        <!-- Populated by app.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- WEBCAM CAMERA MODAL -->
+  <div id="cameraModal" style="display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); align-items: center; justify-content: center;">
+    <div class="glass-panel" style="width: 90%; max-width: 640px; padding: 1.5rem; text-align: center;">
+      <h3 style="font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 1rem;">Align Leaf Inside Camera View</h3>
+      <div style="position: relative; width: 100%; height: 360px; background: #000; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 1.5rem;">
+        <video id="webcamVideo" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+        <div style="position: absolute; inset: 40px; border: 2px dashed var(--emerald-light); border-radius: var(--radius-md); pointer-events: none;"></div>
+      </div>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <button class="btn-primary" id="btnSnapPhoto">
+          <i data-lucide="aperture"></i> Snap & Analyze
+        </button>
+        <button class="btn-secondary" id="btnCloseCamera">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="dataset.js"></script>
+  <script src="scanner.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) window.lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
